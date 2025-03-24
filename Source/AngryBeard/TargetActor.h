@@ -7,24 +7,29 @@
 UCLASS()
 class ANGRYBEARD_API ATargetActor : public AActor
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
-    ATargetActor();
+	ATargetActor();
 
 protected:
-    virtual void BeginPlay() override;
+	virtual void BeginPlay() override;
 
-    UFUNCTION()
-    virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-        UPrimitiveComponent* OtherComp, FVector NormalImpulse,
-        const FHitResult& Hit);
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+		const FHitResult& Hit);
 
-    virtual void IncrementScore();
+	virtual void IncrementScore();
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
-    UStaticMeshComponent* MeshComponent;
+	virtual int32 GetBaseScore() const;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
-    class UBoxComponent* CollisionComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* CollisionComponent;
+
+private:
+	float SpawnTime;
 };

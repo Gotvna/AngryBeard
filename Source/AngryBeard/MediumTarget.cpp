@@ -2,11 +2,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "AngryGameMode.h"
 
-void AMediumTarget::IncrementScore()
+int32 AMediumTarget::GetBaseScore() const
 {
-	AAngryGameMode* GameMode = Cast<AAngryGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GameMode)
-	{
-		GameMode->AddScore(2);
-	}
+	return 2;
 }

@@ -6,40 +6,46 @@
 
 ATargetActor::ATargetActor()
 {
-    PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = false;
 
-    CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
-    RootComponent = CollisionComponent;
-    CollisionComponent->SetCollisionProfileName("BlockAll");
-    CollisionComponent->SetNotifyRigidBodyCollision(true); // Needed for OnHit
-    CollisionComponent->OnComponentHit.AddDynamic(this, &ATargetActor::OnHit);
+	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
+	RootComponent = CollisionComponent;
+	CollisionComponent->SetCollisionProfileName("BlockAll");
+	CollisionComponent->SetNotifyRigidBodyCollision(true);
+	CollisionComponent->OnComponentHit.AddDynamic(this, &ATargetActor::OnHit);
 
-    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-    MeshComponent->SetupAttachment(RootComponent);
-    MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(RootComponent);
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ATargetActor::BeginPlay()
 {
-    Super::BeginPlay();
+	Super::BeginPlay();
+	SpawnTime = GetWorld()->GetTimeSeconds();
 }
 
 void ATargetActor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-    UPrimitiveComponent* OtherComp, FVector NormalImpulse,
-    const FHitResult& Hit)
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+	const FHitResult& Hit)
 {
-    if (OtherActor && OtherActor->ActorHasTag("Bullet"))
-    {
-        IncrementScore();
-        Destroy();
-    }
+	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
+	{
+		IncrementScore();
+		Destroy();
+	}
 }
 
 void ATargetActor::IncrementScore()
 {
-    AAngryGameMode* GameMode = Cast<AAngryGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-    if (GameMode)
-    {
-        GameMode->AddScore(1);
-    }
+	AAngryGameMode* GameMode = Cast<AAngryGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
+	{
+		GameMode->AddScore(GetBaseScore());
+	}
+}
+
+int32 ATargetActor::GetBaseScore() const
+{
+	return 1;
 }
