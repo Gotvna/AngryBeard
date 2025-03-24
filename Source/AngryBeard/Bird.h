@@ -4,16 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Slingshot.generated.h"
+#include "Bird.generated.h"
 
 UCLASS()
-class ANGRYBEARD_API ASlingshot : public AActor
+class ANGRYBEARD_API ABird : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASlingshot();
+	ABird();
+
+	void SetFree();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,4 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+public:
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* StaticMesh;
 };

@@ -1,27 +1,35 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Slingshot.h"
+#include "Bird.h"
 
 // Sets default values
-ASlingshot::ASlingshot()
+ABird::ABird()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("RootComponent");
+	RootComponent = StaticMesh;
+}
+
+void ABird::SetFree()
+{
+	StaticMesh->SetSimulatePhysics(true);
+
+	StaticMesh->SetPhysicsLinearVelocity(FVector(-3000.0, 0.0, 1200.0));
 }
 
 // Called when the game starts or when spawned
-void ASlingshot::BeginPlay()
+void ABird::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void ASlingshot::Tick(float DeltaTime)
+void ABird::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
-

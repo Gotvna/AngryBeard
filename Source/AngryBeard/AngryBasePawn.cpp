@@ -2,6 +2,7 @@
 
 #include "AngryBasePawn.h"
 
+#include "Components/ArrowComponent.h"
 #include "EnhancedInputSubsystems.h"
 
 
@@ -16,8 +17,16 @@ AAngryBasePawn::AAngryBasePawn()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	BirdSpawnPoint = CreateDefaultSubobject<UArrowComponent>("BirdSpawnPoint");
 
 	Mesh->SetupAttachment(RootComponent);
+	BirdSpawnPoint->SetupAttachment(RootComponent);
+}
+
+ABird* AAngryBasePawn::SpawnBird(const TSubclassOf<ABird>& birdClass)
+{
+	Bird = GetWorld()->SpawnActor<ABird>(birdClass.Get(), BirdSpawnPoint->GetComponentLocation(), BirdSpawnPoint->GetComponentRotation());
+	return Bird;
 }
 
 // Called when the game starts or when spawned
@@ -59,4 +68,7 @@ void AAngryBasePawn::StartAim(const FInputActionInstance& Instance)
 void AAngryBasePawn::Shoot(const FInputActionInstance& Instance)
 {
 	DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100, FColor::Red, false, 5.0F);
+	if (Bird) {
+		Bird->SetFree();
+	}
 }

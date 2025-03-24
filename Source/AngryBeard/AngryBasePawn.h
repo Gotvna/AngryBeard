@@ -8,7 +8,11 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 
+#include "AngryBeard/Bird.h"
+
 #include "AngryBasePawn.generated.h"
+
+class UArrowComponent;
 
 
 UCLASS()
@@ -19,6 +23,9 @@ class ANGRYBEARD_API AAngryBasePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AAngryBasePawn();
+
+	UFUNCTION(BlueprintCallable)
+	ABird* SpawnBird(const TSubclassOf<ABird>& birdClass);
 
 protected:
 	// Called when the game starts or when spawned
@@ -47,9 +54,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere)
+	UArrowComponent* BirdSpawnPoint;
+
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputMappingContext* InputMapping;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputAction* AimAction;
+
+	UPROPERTY()
+	TObjectPtr<ABird> Bird;
 };
