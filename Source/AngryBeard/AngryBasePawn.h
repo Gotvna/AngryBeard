@@ -46,6 +46,9 @@ private:
 	void StartAim(const FInputActionInstance& Instance);
 
 	UFUNCTION()
+	void Aim(const FInputActionInstance& Instance);
+
+	UFUNCTION()
 	void Shoot(const FInputActionInstance& Instance);
 
 
@@ -63,6 +66,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputAction* AimAction;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<ABird> Bird;
+
+private:
+
+	// Cached position of the sling's "center" (bird's position at rest).
+	FVector slingCenter;
+
+	// Yaw-pitch of where we're aiming.
+	FRotator aimRotation;
 };

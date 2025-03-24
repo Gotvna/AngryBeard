@@ -4,6 +4,8 @@
 
 #include "Components/ArrowComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
@@ -34,6 +36,7 @@ void AAngryBasePawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	slingCenter = BirdSpawnPoint->GetComponentLocation();
 }
 
 // Called every frame
@@ -56,6 +59,7 @@ void AAngryBasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	UEnhancedInputComponent* enhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	enhancedInput->BindAction(AimAction, ETriggerEvent::Started, this, &AAngryBasePawn::StartAim);
+	enhancedInput->BindAction(AimAction, ETriggerEvent::Ongoing, this, &AAngryBasePawn::Aim);
 	enhancedInput->BindAction(AimAction, ETriggerEvent::Completed, this, &AAngryBasePawn::Shoot);
 }
 
@@ -65,10 +69,28 @@ void AAngryBasePawn::StartAim(const FInputActionInstance& Instance)
 	DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + GetActorForwardVector()*100, FColor::Green, false, 5.0F);
 }
 
+void AAngryBasePawn::Aim(const FInputActionInstance& Instance)
+{
+	if (!Bird) return;
+
+	double mouseX, mouseY;
+	int viewportX, viewportY;
+
+	APlayerController* playerController = UGameplayStatics::GetPlayerController(this, 0);
+	playerController->bShowMouseCursor = true;
+	playerController->GetMousePosition(mouseX, mouseY);
+	playerController->GetViewportSize(viewportX, viewportY);
+
+	double mouseRelX = (mouseX / viewportX) - 0.5, mouseRelY = (mouseY / viewportY) - 0.5;
+	aimRotation = FRotator(mouseRelY * 80.0, mouseRelX * -120.0, 0.0);
+	Bird->SetActorLocation(slingCenter - UKismetMathLibrary::GetForwardVector(aimRotation) * 100.0);
+}
+
 void AAngryBasePawn::Shoot(const FInputActionInstance& Instance)
 {
 	DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100, FColor::Red, false, 5.0F);
 	if (Bird) {
-		Bird->SetFree();
+		FVector vel = UKismetMathLibrary::GetForwardVector(aimRotation) * 1800.0;
+		Bird->ShootWithVelocity(vel);
 	}
 }
