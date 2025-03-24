@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScoreChanged, int32, NewScore);
+
 UCLASS()
 class ANGRYBEARD_API AAngryGameMode : public AGameMode
 {
@@ -22,6 +25,9 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "Score")
     int32 GetScore() const;
+
+	UPROPERTY(BlueprintAssignable, Category = "Score")
+	FOnScoreChanged OnScoreChanged;
 
 private:
     int32 Score;

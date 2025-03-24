@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	ABird();
 
-	void SetFree();
+	void ShootWithVelocity(const FVector& velocity);
 
 protected:
 	// Called when the game starts or when spawned

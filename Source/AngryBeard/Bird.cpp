@@ -13,11 +13,10 @@ ABird::ABird()
 	RootComponent = StaticMesh;
 }
 
-void ABird::SetFree()
+void ABird::ShootWithVelocity(const FVector& velocity)
 {
 	StaticMesh->SetSimulatePhysics(true);
-
-	StaticMesh->SetPhysicsLinearVelocity(FVector(-3000.0, 0.0, 1200.0));
+	StaticMesh->SetPhysicsLinearVelocity(velocity);
 }
 
 // Called when the game starts or when spawned
