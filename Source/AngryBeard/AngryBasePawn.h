@@ -60,6 +60,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	UArrowComponent* BirdSpawnPoint;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UStaticMeshComponent* SlingSocket;
+
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputMappingContext* InputMapping;
 
