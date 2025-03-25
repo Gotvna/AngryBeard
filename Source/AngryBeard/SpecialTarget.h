@@ -16,9 +16,13 @@ protected:
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Target|Visual")
-	UMaterialInterface* DamagedMaterial;
+    virtual void SpawnFieldSystem() override;
 
-	bool bMaterialSwapped = false;
+    virtual void Tick(float DeltaTime) override;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Target|Visual")
+	UMaterialInterface* DamagedMaterial;
+	int32 FinalScore = 100;
+
 };

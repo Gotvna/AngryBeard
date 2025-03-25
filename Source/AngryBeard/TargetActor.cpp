@@ -10,8 +10,9 @@ ATargetActor::ATargetActor()
 
 	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
 	RootComponent = CollisionComponent;
-	CollisionComponent->SetCollisionProfileName("BlockAll");
+	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
 	CollisionComponent->SetNotifyRigidBodyCollision(true);
+	CollisionComponent->SetSimulatePhysics(true);
 	CollisionComponent->OnComponentHit.AddDynamic(this, &ATargetActor::OnHit);
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -25,13 +26,18 @@ void ATargetActor::BeginPlay()
 	SpawnTime = GetWorld()->GetTimeSeconds();
 }
 
+void ATargetActor::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+}
+
 void ATargetActor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse,
-	const FHitResult& Hit)
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
 		IncrementScore();
+		SpawnFieldSystem();
 		Destroy();
 	}
 }
@@ -48,4 +54,20 @@ void ATargetActor::IncrementScore()
 int32 ATargetActor::GetBaseScore() const
 {
 	return 1;
+}
+
+void ATargetActor::SpawnFieldSystem()
+{
+	if (ExplosionFieldClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		GetWorld()->SpawnActor<AFieldSystemActor>(
+			ExplosionFieldClass,
+			GetActorLocation(),
+			FRotator::ZeroRotator,
+			SpawnParams
+		);
+	}
 }
