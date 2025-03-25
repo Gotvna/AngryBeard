@@ -29,16 +29,25 @@ AAngryBasePawn::AAngryBasePawn()
 
 ABird* AAngryBasePawn::SpawnBird(const TSubclassOf<ABird>& birdClass)
 {
-	Bird = GetWorld()->SpawnActor<ABird>(birdClass.Get(), BirdSpawnPoint->GetComponentLocation(), BirdSpawnPoint->GetComponentRotation());
+	Bird = GetWorld()->SpawnActor<ABird>(birdClass.Get(), slingCenter, FRotator());
+
+	SlingSocket->SetSimulatePhysics(false);
+	SlingSocket->SetWorldLocation(slingCenter);
+
 	return Bird;
 }
 
-// Called when the game starts or when spawned
+void AAngryBasePawn::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	slingCenter = BirdSpawnPoint->GetComponentLocation();
+}
+
 void AAngryBasePawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	slingCenter = BirdSpawnPoint->GetComponentLocation();
+
 }
 
 // Called every frame
@@ -68,7 +77,7 @@ void AAngryBasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AAngryBasePawn::StartAim(const FInputActionInstance& Instance)
 {
-	DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + GetActorForwardVector()*100, FColor::Green, false, 5.0F);
+	
 }
 
 void AAngryBasePawn::Aim(const FInputActionInstance& Instance)
@@ -93,7 +102,6 @@ void AAngryBasePawn::Aim(const FInputActionInstance& Instance)
 
 void AAngryBasePawn::Shoot(const FInputActionInstance& Instance)
 {
-	DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100, FColor::Red, false, 5.0F);
 	if (Bird) {
 		FVector vel = UKismetMathLibrary::GetForwardVector(aimRotation) * 1800.0;
 		Bird->ShootWithVelocity(vel);

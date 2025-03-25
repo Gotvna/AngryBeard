@@ -16,10 +16,7 @@ void AAngryGameMode::BeginPlay()
 
 	Slingshot = Cast<AAngryBasePawn>(UGameplayStatics::GetPlayerPawn(this, 0));
 
-	if (Slingshot && !BirdsToSpawn.IsEmpty()) {
-		TSubclassOf<ABird> birdType = BirdsToSpawn.Pop();
-		Slingshot->SpawnBird(birdType);
-	}
+	SpawnNextBird();
 }
 
 void AAngryGameMode::AddScore(int32 Amount)
@@ -31,4 +28,18 @@ void AAngryGameMode::AddScore(int32 Amount)
 int32 AAngryGameMode::GetScore() const
 {
     return Score;
+}
+
+
+void AAngryGameMode::SpawnNextBird()
+{
+	if (Slingshot && !BirdsToSpawn.IsEmpty()) {
+		TSubclassOf<ABird> birdType = BirdsToSpawn.Pop();
+		Slingshot->SpawnBird(birdType);
+	}
+}
+
+int32 AAngryGameMode::GetRemainingBirds() const
+{
+	return BirdsToSpawn.Num();
 }

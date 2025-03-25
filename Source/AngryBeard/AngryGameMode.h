@@ -35,6 +35,13 @@ public:
 	FOnScoreChanged OnScoreChanged;
 
 
+	UFUNCTION(BlueprintCallable)
+	void SpawnNextBird();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	int32 GetRemainingBirds() const;
+
+
 public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

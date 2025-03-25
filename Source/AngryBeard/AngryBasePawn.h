@@ -28,7 +28,7 @@ public:
 	ABird* SpawnBird(const TSubclassOf<ABird>& birdClass);
 
 protected:
-	// Called when the game starts or when spawned
+	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 
 public:	
