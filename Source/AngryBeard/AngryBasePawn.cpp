@@ -20,9 +20,11 @@ AAngryBasePawn::AAngryBasePawn()
 	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	BirdSpawnPoint = CreateDefaultSubobject<UArrowComponent>("BirdSpawnPoint");
+	SlingSocket = CreateDefaultSubobject<UStaticMeshComponent>("SlingSocket");
 
 	Mesh->SetupAttachment(RootComponent);
 	BirdSpawnPoint->SetupAttachment(RootComponent);
+	SlingSocket->SetupAttachment(RootComponent);
 }
 
 ABird* AAngryBasePawn::SpawnBird(const TSubclassOf<ABird>& birdClass)
@@ -83,7 +85,10 @@ void AAngryBasePawn::Aim(const FInputActionInstance& Instance)
 
 	double mouseRelX = (mouseX / viewportX) - 0.5, mouseRelY = (mouseY / viewportY) - 0.5;
 	aimRotation = FRotator(mouseRelY * 80.0, mouseRelX * -120.0, 0.0);
-	Bird->SetActorLocation(slingCenter - UKismetMathLibrary::GetForwardVector(aimRotation) * 100.0);
+
+	FVector socketPos(slingCenter - UKismetMathLibrary::GetForwardVector(aimRotation) * 100.0);
+	Bird->SetActorLocation(socketPos);
+	SlingSocket->SetWorldLocation(socketPos);
 }
 
 void AAngryBasePawn::Shoot(const FInputActionInstance& Instance)
@@ -92,5 +97,7 @@ void AAngryBasePawn::Shoot(const FInputActionInstance& Instance)
 	if (Bird) {
 		FVector vel = UKismetMathLibrary::GetForwardVector(aimRotation) * 1800.0;
 		Bird->ShootWithVelocity(vel);
+		SlingSocket->SetSimulatePhysics(true);
+		SlingSocket->SetPhysicsLinearVelocity(vel);
 	}
 }
