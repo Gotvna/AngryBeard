@@ -6,6 +6,9 @@
 #include "GameFramework/GameMode.h"
 #include "AngryGameMode.generated.h"
 
+class ABird;
+class AAngryBasePawn;
+
 /**
  * 
  */
@@ -19,6 +22,8 @@ class ANGRYBEARD_API AAngryGameMode : public AGameMode
 	
 	AAngryGameMode();
 
+	virtual void BeginPlay() override;
+
 public:
     UFUNCTION(BlueprintCallable, Category = "Score")
     void AddScore(int32 Amount);
@@ -29,6 +34,15 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Score")
 	FOnScoreChanged OnScoreChanged;
 
+
+public:
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray< TSubclassOf<ABird> > BirdsToSpawn;
+
 private:
+
     int32 Score;
+
+	AAngryBasePawn* Slingshot;
 };
