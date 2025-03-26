@@ -33,7 +33,6 @@ void ASpecialTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 void ASpecialTarget::SpawnFieldSystem()
 {
 	Super::SpawnFieldSystem();
-
 }
 
 void ASpecialTarget::Tick(float DeltaTime)
@@ -45,17 +44,17 @@ void ASpecialTarget::Tick(float DeltaTime)
 	const int32 MaxScore = 100;
 	const int32 MinScore = 10;
 
-	int32 NewScore = FMath::Clamp(MaxScore - FMath::FloorToInt(TimeAlive), MinScore, MaxScore);
+	int32 NewScore = FMath::Clamp(MaxScore - (FMath::FloorToInt(TimeAlive / 1.f) * 10), MinScore, MaxScore);
 
 	if (NewScore != FinalScore)
 	{
 		FinalScore = NewScore;
-		UE_LOG(LogTemp, Warning, TEXT("SpecialTarget Score: %d"), FinalScore);
 	}
 
-	if (FinalScore <= 90 && DamagedMaterial)
+	if (FinalScore <= MinScore && !bMaterialSwapped && DamagedMaterial)
 	{
 		MeshComponent->SetMaterial(0, DamagedMaterial);
+		bMaterialSwapped = true;
 	}
 }
 
