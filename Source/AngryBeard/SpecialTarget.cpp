@@ -56,7 +56,6 @@ void ASpecialTarget::Tick(float DeltaTime)
 	if (FinalScore <= 90 && DamagedMaterial)
 	{
 		MeshComponent->SetMaterial(0, DamagedMaterial);
-		bMaterialSwapped = true;
 	}
 }
 
