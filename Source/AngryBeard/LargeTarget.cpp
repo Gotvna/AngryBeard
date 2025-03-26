@@ -26,19 +26,3 @@ void ALargeTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		Destroy();
 	}
 }
-
-void ALargeTarget::SpawnFieldSystem()
-{
-	if (ExplosionFieldClass)
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		GetWorld()->SpawnActor<AFieldSystemActor>(
-			ExplosionFieldClass,
-			GetActorLocation(),
-			FRotator::ZeroRotator,
-			SpawnParams
-		);
-	}
-}
