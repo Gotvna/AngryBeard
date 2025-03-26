@@ -13,13 +13,14 @@ ATargetActor::ATargetActor()
 	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
 	CollisionComponent->SetNotifyRigidBodyCollision(true);
 	CollisionComponent->SetSimulatePhysics(true);
-	CollisionComponent->OnComponentHit.AddDynamic(this, &ATargetActor::OnHit);
 }
 
 void ATargetActor::BeginPlay()
 {
 	Super::BeginPlay();
+
 	SpawnTime = GetWorld()->GetTimeSeconds();
+	CollisionComponent->OnComponentHit.AddDynamic(this, &ATargetActor::OnHit);
 }
 
 void ATargetActor::Tick(float DeltaTime)

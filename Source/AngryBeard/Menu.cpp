@@ -3,4 +3,4 @@
 
 #include "Menu.h"
 
-IMPLEMENT_MODULE(FDefaultModuleImpl, menu, "Menu");
+IMPLEMENT_MODULE(FDefaultModuleImpl, menu);

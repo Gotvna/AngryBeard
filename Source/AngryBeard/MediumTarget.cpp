@@ -4,18 +4,15 @@
 #include "AngryGameMode.h"
 
 
+AMediumTarget::AMediumTarget()
+{
+	
+}
+
 void AMediumTarget::BeginPlay()
 {
 	Super::BeginPlay();
 	PrimaryActorTick.bCanEverTick = true;
-
-	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
-	RootComponent = CollisionComponent;
-	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
-	CollisionComponent->SetNotifyRigidBodyCollision(true);
-	CollisionComponent->SetSimulatePhysics(true);
-	CollisionComponent->OnComponentHit.AddDynamic(this, &AMediumTarget::OnHit);
-
 }
 
 int32 AMediumTarget::GetBaseScore() const

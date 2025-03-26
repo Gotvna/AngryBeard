@@ -10,6 +10,8 @@ class ANGRYBEARD_API AMediumTarget : public ATargetActor
 	GENERATED_BODY()
 
 protected:
+	AMediumTarget();
+
 	virtual void BeginPlay() override;
 	virtual int32 GetBaseScore() const override;
 
