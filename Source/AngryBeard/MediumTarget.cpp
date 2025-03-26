@@ -6,7 +6,12 @@
 
 AMediumTarget::AMediumTarget()
 {
-	
+	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
+	RootComponent = CollisionComponent;
+	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
+	CollisionComponent->SetNotifyRigidBodyCollision(true);
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	CollisionComponent->OnComponentHit.AddDynamic(this, &AMediumTarget::OnHit);
 }
 
 void AMediumTarget::BeginPlay()
@@ -32,6 +37,8 @@ void AMediumTarget::IncrementScore()
 void AMediumTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("Hit"));
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
 		IncrementScore();
