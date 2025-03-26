@@ -6,7 +6,7 @@
 
 ATargetActor::ATargetActor()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
 	RootComponent = CollisionComponent;
@@ -14,10 +14,6 @@ ATargetActor::ATargetActor()
 	CollisionComponent->SetNotifyRigidBodyCollision(true);
 	CollisionComponent->SetSimulatePhysics(true);
 	CollisionComponent->OnComponentHit.AddDynamic(this, &ATargetActor::OnHit);
-
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	MeshComponent->SetupAttachment(RootComponent);
-	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ATargetActor::BeginPlay()

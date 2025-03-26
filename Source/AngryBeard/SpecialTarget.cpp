@@ -1,4 +1,5 @@
 #include "SpecialTarget.h"
+#include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "AngryGameMode.h"
 #include "Field/FieldSystemActor.h"
@@ -7,6 +8,13 @@ void ASpecialTarget::BeginPlay()
 {
 	Super::BeginPlay();
 	PrimaryActorTick.bCanEverTick = true;
+
+	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
+	RootComponent = CollisionComponent;
+	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
+	CollisionComponent->SetNotifyRigidBodyCollision(true);
+	CollisionComponent->SetSimulatePhysics(true);
+	CollisionComponent->OnComponentHit.AddDynamic(this, &ASpecialTarget::OnHit);
 
 }
 
@@ -32,7 +40,18 @@ void ASpecialTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 
 void ASpecialTarget::SpawnFieldSystem()
 {
-	Super::SpawnFieldSystem();
+	if (ExplosionFieldClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		GetWorld()->SpawnActor<AFieldSystemActor>(
+			ExplosionFieldClass,
+			GetActorLocation(),
+			FRotator::ZeroRotator,
+			SpawnParams
+		);
+	}
 }
 
 void ASpecialTarget::Tick(float DeltaTime)
@@ -49,12 +68,6 @@ void ASpecialTarget::Tick(float DeltaTime)
 	if (NewScore != FinalScore)
 	{
 		FinalScore = NewScore;
-	}
-
-	if (FinalScore <= MinScore && !bMaterialSwapped && DamagedMaterial)
-	{
-		MeshComponent->SetMaterial(0, DamagedMaterial);
-		bMaterialSwapped = true;
 	}
 }
 

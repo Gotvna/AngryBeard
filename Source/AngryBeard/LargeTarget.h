@@ -14,6 +14,12 @@ protected:
 
 	virtual void IncrementScore() override;
 
+	virtual void SpawnFieldSystem() override;
+
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
+
+public:
+	class UBoxComponent* CollisionComponent;
+
 };

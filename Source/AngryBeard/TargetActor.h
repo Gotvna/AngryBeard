@@ -30,15 +30,13 @@ protected:
 
     virtual void Tick(float DeltaTime);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* MeshComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* CollisionComponent;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Target|Explosion")
 	TSubclassOf<AFieldSystemActor> ExplosionFieldClass;
 
 private:
 	float SpawnTime;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* CollisionComponent;
+
 };

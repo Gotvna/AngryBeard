@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 
 // Sets default values
@@ -95,9 +96,38 @@ void AAngryBasePawn::Aim(const FInputActionInstance& Instance)
 	double mouseRelX = (mouseX / viewportX) - 0.5, mouseRelY = (mouseY / viewportY) - 0.5;
 	aimRotation = FRotator(mouseRelY * 80.0, mouseRelX * -120.0, 0.0);
 
-	FVector socketPos(slingCenter - UKismetMathLibrary::GetForwardVector(aimRotation) * 100.0);
+	FVector socketPos = slingCenter - UKismetMathLibrary::GetForwardVector(aimRotation) * 100.0;
 	Bird->SetActorLocation(socketPos);
 	SlingSocket->SetWorldLocation(socketPos);
+
+	// Predict trajectory
+	FVector launchVelocity = UKismetMathLibrary::GetForwardVector(aimRotation) * 1800.0;
+
+	FPredictProjectilePathParams pathParams;
+	pathParams.StartLocation = socketPos;
+	pathParams.LaunchVelocity = launchVelocity;
+	pathParams.bTraceWithCollision = true;
+	pathParams.ProjectileRadius = 5.0f;
+	pathParams.MaxSimTime = 2.0f;
+	pathParams.SimFrequency = 15.0f;
+	pathParams.TraceChannel = ECC_Visibility;
+	pathParams.OverrideGravityZ = 0.0f;
+
+	FPredictProjectilePathResult pathResult;
+
+	bool hit = UGameplayStatics::PredictProjectilePath(this, pathParams, pathResult);
+
+	for (const FPredictProjectilePathPointData& point : pathResult.PathData)
+	{
+		DrawDebugPoint(
+			GetWorld(),
+			point.Location,
+			8.0f,
+			FColor::Yellow,
+			false,
+			0.05f
+		);
+	}
 }
 
 void AAngryBasePawn::Shoot(const FInputActionInstance& Instance)

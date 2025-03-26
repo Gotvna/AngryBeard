@@ -1,6 +1,22 @@
 #include "MediumTarget.h"
+#include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "AngryGameMode.h"
+
+
+void AMediumTarget::BeginPlay()
+{
+	Super::BeginPlay();
+	PrimaryActorTick.bCanEverTick = true;
+
+	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
+	RootComponent = CollisionComponent;
+	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
+	CollisionComponent->SetNotifyRigidBodyCollision(true);
+	CollisionComponent->SetSimulatePhysics(true);
+	CollisionComponent->OnComponentHit.AddDynamic(this, &AMediumTarget::OnHit);
+
+}
 
 int32 AMediumTarget::GetBaseScore() const
 {
@@ -22,6 +38,24 @@ void AMediumTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
 		IncrementScore();
+		SpawnFieldSystem();
 		Destroy();
+	}
+}
+
+
+void AMediumTarget::SpawnFieldSystem()
+{
+	if (ExplosionFieldClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		GetWorld()->SpawnActor<AFieldSystemActor>(
+			ExplosionFieldClass,
+			GetActorLocation(),
+			FRotator::ZeroRotator,
+			SpawnParams
+		);
 	}
 }

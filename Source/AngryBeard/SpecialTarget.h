@@ -28,5 +28,7 @@ private:
 
 	bool bMaterialSwapped = false;
 
+public:
+	class UBoxComponent* CollisionComponent;
 
 };
