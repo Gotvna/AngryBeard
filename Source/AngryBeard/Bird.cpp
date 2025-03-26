@@ -1,34 +1,51 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Bird.h"
 
-// Sets default values
 ABird::ABird()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = true;
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("RootComponent");
-	RootComponent = StaticMesh;
+    StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+    RootComponent = StaticMesh;
+
+    StaticMesh->SetSimulatePhysics(true);
+    StaticMesh->SetNotifyRigidBodyCollision(true);
+
+    StaticMesh->OnComponentHit.AddDynamic(this, &ABird::OnHit);
+
+    FieldSystem = CreateDefaultSubobject<UFieldSystemComponent>(TEXT("FieldSystem"));
+    FieldSystem->SetupAttachment(RootComponent);
+}
+
+void ABird::BeginPlay()
+{
+    Super::BeginPlay();
+}
+
+void ABird::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
 }
 
 void ABird::ShootWithVelocity(const FVector& velocity)
 {
-	StaticMesh->SetSimulatePhysics(true);
-	StaticMesh->SetPhysicsLinearVelocity(velocity);
+    StaticMesh->SetPhysicsLinearVelocity(velocity);
 }
 
-// Called when the game starts or when spawned
-void ABird::BeginPlay()
+void ABird::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::BeginPlay();
-	
-}
+    if (!FieldSystem) return;
 
-// Called every frame
-void ABird::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+    URadialVector* RadialVector = NewObject<URadialVector>(this);
+    RadialVector->Magnitude = 1500.0f;
+    RadialVector->Position = Hit.ImpactPoint;
 
+    FieldSystem->ApplyPhysicsField(
+        true,
+        EFieldPhysicsType::Field_LinearImpulse,
+        nullptr,
+        RadialVector
+    );
+
+	Destroy();
 }

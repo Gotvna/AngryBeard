@@ -22,7 +22,6 @@ void ALargeTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
 		IncrementScore();
-		SpawnFieldSystem();
 		Destroy();
 	}
 }
