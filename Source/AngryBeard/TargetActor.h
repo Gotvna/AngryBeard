@@ -25,13 +25,7 @@ protected:
 
 	virtual void IncrementScore();
 	virtual int32 GetBaseScore() const;
-
-	virtual void SpawnFieldSystem();
-
     virtual void Tick(float DeltaTime);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Target|Explosion")
-	TSubclassOf<AFieldSystemActor> ExplosionFieldClass;
 
 private:
 	float SpawnTime;

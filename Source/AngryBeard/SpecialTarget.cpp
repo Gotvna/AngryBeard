@@ -33,24 +33,7 @@ void ASpecialTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
 		IncrementScore();
-		SpawnFieldSystem();
 		Destroy();
-	}
-}
-
-void ASpecialTarget::SpawnFieldSystem()
-{
-	if (ExplosionFieldClass)
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		GetWorld()->SpawnActor<AFieldSystemActor>(
-			ExplosionFieldClass,
-			GetActorLocation(),
-			FRotator::ZeroRotator,
-			SpawnParams
-		);
 	}
 }
 
