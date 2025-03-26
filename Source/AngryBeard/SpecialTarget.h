@@ -23,6 +23,10 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = "Target|Visual")
 	UMaterialInterface* DamagedMaterial;
+
 	int32 FinalScore = 100;
+
+	bool bMaterialSwapped = false;
+
 
 };
