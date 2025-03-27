@@ -26,10 +26,14 @@ protected:
 	virtual void IncrementScore();
 	virtual int32 GetBaseScore() const;
     virtual void Tick(float DeltaTime);
+	void SelfDestruct();
 
+	UFUNCTION()
+	void HandleSelfDestruct();
 protected:
 	float SpawnTime;
 
+	FTimerHandle SelfDestructTimerHandle;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* CollisionComponent;
 

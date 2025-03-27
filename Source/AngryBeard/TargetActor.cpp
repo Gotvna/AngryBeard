@@ -31,10 +31,12 @@ void ATargetActor::Tick(float DeltaTime)
 void ATargetActor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Hit!, '%s'"), *OtherActor->GetName());
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
+        UE_LOG(LogTemp, Warning, TEXT("Hit by bullet!"));
 		IncrementScore();
-		Destroy();
+		SelfDestruct();
 	}
 }
 
@@ -50,4 +52,14 @@ void ATargetActor::IncrementScore()
 int32 ATargetActor::GetBaseScore() const
 {
 	return 1;
+}
+
+void ATargetActor::SelfDestruct()
+{
+	GetWorld()->GetTimerManager().SetTimer(SelfDestructTimerHandle, this, &ATargetActor::HandleSelfDestruct, 2.0f, false);
+}
+
+void ATargetActor::HandleSelfDestruct()
+{
+	Destroy();
 }
