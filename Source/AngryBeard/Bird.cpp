@@ -23,6 +23,7 @@ ABird::ABird()
 void ABird::BeginPlay()
 {
     Super::BeginPlay();
+    StaticMesh->OnComponentHit.AddDynamic(this, &ABird::OnHit);
 }
 
 void ABird::Tick(float DeltaTime)

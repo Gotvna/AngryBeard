@@ -6,18 +6,12 @@
 
 AMediumTarget::AMediumTarget()
 {
-	CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComponent"));
-	RootComponent = CollisionComponent;
-	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
-	CollisionComponent->SetNotifyRigidBodyCollision(true);
-	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	CollisionComponent->OnComponentHit.AddDynamic(this, &AMediumTarget::OnHit);
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AMediumTarget::BeginPlay()
 {
 	Super::BeginPlay();
-	PrimaryActorTick.bCanEverTick = true;
 }
 
 int32 AMediumTarget::GetBaseScore() const
@@ -41,7 +35,12 @@ void AMediumTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UE_LOG(LogTemp, Warning, TEXT("Hit"));
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Bullet Hit '%s'"), *OtherActor->GetName());
 		IncrementScore();
 		Destroy();
 	}
+}
+
+void AMediumTarget::SelfDestruct()
+{
 }

@@ -27,7 +27,7 @@ protected:
 	virtual int32 GetBaseScore() const;
     virtual void Tick(float DeltaTime);
 
-private:
+protected:
 	float SpawnTime;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Target", meta = (AllowPrivateAccess = "true"))

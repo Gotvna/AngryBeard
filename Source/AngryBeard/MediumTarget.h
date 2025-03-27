@@ -22,6 +22,4 @@ protected:
 
 	UFUNCTION()
 	void SelfDestruct();
-public:
-	class UBoxComponent* CollisionComponent;
 };
