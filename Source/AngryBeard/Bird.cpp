@@ -49,5 +49,5 @@ void ABird::ShootWithVelocity(const FVector& velocity)
 void ABird::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Destroy();
+
 }
