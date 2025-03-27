@@ -14,6 +14,10 @@ ABird::ABird()
 
     FieldSystem = CreateDefaultSubobject<UFieldSystemComponent>(TEXT("FieldSystem"));
     FieldSystem->SetupAttachment(RootComponent);
+
+    ImpactParticleComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ImpactParticle"));
+    ImpactParticleComponent->SetupAttachment(RootComponent);
+    ImpactParticleComponent->SetAutoActivate(false);
 }
 
 void ABird::BeginPlay()
@@ -34,18 +38,27 @@ void ABird::ShootWithVelocity(const FVector& velocity)
 void ABird::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-    if (!FieldSystem) return;
 
-    URadialVector* RadialVector = NewObject<URadialVector>(this);
-    RadialVector->Magnitude = 1500.0f;
-    RadialVector->Position = Hit.ImpactPoint;
+    if (FieldSystem)
+    {
+        URadialVector* RadialVector = NewObject<URadialVector>(this);
+        RadialVector->Magnitude = 1500.0f;
+        RadialVector->Position = Hit.ImpactPoint;
 
-    FieldSystem->ApplyPhysicsField(
-        true,
-        EFieldPhysicsType::Field_LinearImpulse,
-        nullptr,
-        RadialVector
-    );
+        FieldSystem->ApplyPhysicsField(
+            true,
+            EFieldPhysicsType::Field_LinearImpulse,
+            nullptr,
+            RadialVector
+        );
+    }
 
-	Destroy();
+    if (NormalImpulse.Size() >= ImpactThreshold && ImpactParticleComponent)
+    {
+        ImpactParticleComponent->SetWorldLocation(Hit.ImpactPoint);
+        ImpactParticleComponent->SetWorldRotation(Hit.ImpactNormal.Rotation());
+        ImpactParticleComponent->Activate(true);
+    }
+
+    Destroy();
 }
