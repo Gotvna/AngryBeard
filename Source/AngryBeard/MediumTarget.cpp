@@ -31,13 +31,18 @@ void AMediumTarget::IncrementScore()
 void AMediumTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-
-	UE_LOG(LogTemp, Warning, TEXT("Hit"), *OtherActor->GetName());
-	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
+	if (OtherActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Bullet Hit '%s'"), *OtherActor->GetName());
-		IncrementScore();
-		Destroy();
+		UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *OtherActor->GetName());
+		if (OtherActor->ActorHasTag("Bullet"))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Bullet Hit '%s'"), *OtherActor->GetName());
+			IncrementScore();
+			Destroy();
+		}
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Other hit actor was invalid (what?)"));
 	}
 }
 
