@@ -54,7 +54,7 @@ int32 ATargetActor::GetBaseScore() const
 
 void ATargetActor::SelfDestruct()
 {
-	GetWorld()->GetTimerManager().SetTimer(SelfDestructTimerHandle, this, &ATargetActor::HandleSelfDestruct, 5.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(SelfDestructTimerHandle, this, &ATargetActor::HandleSelfDestruct, 2.0f, false);
 }
 
 void ATargetActor::HandleSelfDestruct()
