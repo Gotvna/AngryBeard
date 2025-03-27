@@ -6,18 +6,12 @@
 
 AMediumTarget::AMediumTarget()
 {
-
 	PrimaryActorTick.bCanEverTick = true;
-	CollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
-	CollisionComponent->SetNotifyRigidBodyCollision(true);
-	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
 }
 
 void AMediumTarget::BeginPlay()
 {
 	Super::BeginPlay();
-	CollisionComponent->OnComponentHit.AddDynamic(this, &AMediumTarget::OnHit);
 }
 
 int32 AMediumTarget::GetBaseScore() const

@@ -3,22 +3,12 @@
 ABird::ABird()
 {
     PrimaryActorTick.bCanEverTick = true;
-
-    StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-    RootComponent = StaticMesh;
-
-    StaticMesh->SetSimulatePhysics(true);
-    StaticMesh->SetNotifyRigidBodyCollision(true);
-
-    StaticMesh->OnComponentHit.AddDynamic(this, &ABird::OnHit);
-
-    FieldSystem = CreateDefaultSubobject<UFieldSystemComponent>(TEXT("FieldSystem"));
-    FieldSystem->SetupAttachment(RootComponent);
 }
 
 void ABird::BeginPlay()
 {
     Super::BeginPlay();
+    StaticMesh->OnComponentHit.AddDynamic(this, &ABird::OnHit);
 }
 
 void ABird::Tick(float DeltaTime)
@@ -34,18 +24,5 @@ void ABird::ShootWithVelocity(const FVector& velocity)
 void ABird::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-    if (!FieldSystem) return;
-
-    URadialVector* RadialVector = NewObject<URadialVector>(this);
-    RadialVector->Magnitude = 1500.0f;
-    RadialVector->Position = Hit.ImpactPoint;
-
-    FieldSystem->ApplyPhysicsField(
-        true,
-        EFieldPhysicsType::Field_LinearImpulse,
-        nullptr,
-        RadialVector
-    );
-
 	Destroy();
 }

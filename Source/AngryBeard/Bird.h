@@ -37,9 +37,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMesh;
 
-	UPROPERTY(EditAnywhere)
-	UFieldSystemComponent* FieldSystem;
-
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

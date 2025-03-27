@@ -22,5 +22,4 @@ protected:
 
 	UFUNCTION()
 	void SelfDestruct();
-public:
 };
