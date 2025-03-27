@@ -27,7 +27,3 @@ void AMediumTarget::IncrementScore()
 		GameMode->AddScore(GetBaseScore());
 	}
 }
-
-void AMediumTarget::SelfDestruct()
-{
-}

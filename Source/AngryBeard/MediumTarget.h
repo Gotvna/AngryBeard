@@ -16,7 +16,4 @@ protected:
 	virtual int32 GetBaseScore() const override;
 
 	virtual void IncrementScore() override;
-
-	UFUNCTION()
-	void SelfDestruct();
 };

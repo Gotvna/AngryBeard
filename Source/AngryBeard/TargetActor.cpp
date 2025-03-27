@@ -34,7 +34,7 @@ void ATargetActor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
 		IncrementScore();
-		Destroy();
+		SelfDestruct();
 	}
 }
 
@@ -50,4 +50,14 @@ void ATargetActor::IncrementScore()
 int32 ATargetActor::GetBaseScore() const
 {
 	return 1;
+}
+
+void ATargetActor::SelfDestruct()
+{
+	GetWorld()->GetTimerManager().SetTimer(SelfDestructTimerHandle, this, &ATargetActor::HandleSelfDestruct, 5.0f, false);
+}
+
+void ATargetActor::HandleSelfDestruct()
+{
+	Destroy();
 }
