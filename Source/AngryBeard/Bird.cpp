@@ -1,65 +1,45 @@
+// Bird.cpp
+
 #include "Bird.h"
+#include "Components/StaticMeshComponent.h"
 
 ABird::ABird()
 {
-    PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = true;
 
-    StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-    RootComponent = StaticMesh;
-
-    StaticMesh->SetSimulatePhysics(true);
-    StaticMesh->SetNotifyRigidBodyCollision(true);
-
-    StaticMesh->OnComponentHit.AddDynamic(this, &ABird::OnHit);
-
-    FieldSystem = CreateDefaultSubobject<UFieldSystemComponent>(TEXT("FieldSystem"));
-    FieldSystem->SetupAttachment(RootComponent);
-
-    ImpactParticleComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ImpactParticle"));
-    ImpactParticleComponent->SetupAttachment(RootComponent);
-    ImpactParticleComponent->SetAutoActivate(false);
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	RootComponent = StaticMesh;
+	StaticMesh->SetSimulatePhysics(true);
+	StaticMesh->SetNotifyRigidBodyCollision(true);
+	StaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	StaticMesh->SetCollisionObjectType(ECC_PhysicsBody);
+	StaticMesh->SetCollisionResponseToAllChannels(ECR_Block);
 }
 
 void ABird::BeginPlay()
 {
-    Super::BeginPlay();
-    StaticMesh->OnComponentHit.AddDynamic(this, &ABird::OnHit);
+	Super::BeginPlay();
+	if (StaticMesh)
+	{
+		StaticMesh->OnComponentHit.AddDynamic(this, &ABird::OnHit);
+	}
 }
 
 void ABird::Tick(float DeltaTime)
 {
-    Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);
 }
 
-void ABird::ShootWithVelocity(const FVector& velocity)
+void ABird::ShootWithVelocity(const FVector& Velocity)
 {
-    StaticMesh->SetPhysicsLinearVelocity(velocity);
+	if (StaticMesh)
+	{
+		StaticMesh->SetPhysicsLinearVelocity(Velocity);
+	}
 }
 
 void ABird::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-    UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-
-    if (FieldSystem)
-    {
-        URadialVector* RadialVector = NewObject<URadialVector>(this);
-        RadialVector->Magnitude = 1500.0f;
-        RadialVector->Position = Hit.ImpactPoint;
-
-        FieldSystem->ApplyPhysicsField(
-            true,
-            EFieldPhysicsType::Field_LinearImpulse,
-            nullptr,
-            RadialVector
-        );
-    }
-
-    if (NormalImpulse.Size() >= ImpactThreshold && ImpactParticleComponent)
-    {
-        ImpactParticleComponent->SetWorldLocation(Hit.ImpactPoint);
-        ImpactParticleComponent->SetWorldRotation(Hit.ImpactNormal.Rotation());
-        ImpactParticleComponent->Activate(true);
-    }
-
-    Destroy();
+	Destroy();
 }

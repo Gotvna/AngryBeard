@@ -32,7 +32,7 @@ void AMediumTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("Hit"));
+	UE_LOG(LogTemp, Warning, TEXT("Hit"), *OtherActor->GetName());
 	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Bullet Hit '%s'"), *OtherActor->GetName());
