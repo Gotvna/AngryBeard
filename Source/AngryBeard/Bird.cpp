@@ -1,7 +1,15 @@
-// Bird.cpp
-
 #include "Bird.h"
+
 #include "Components/StaticMeshComponent.h"
+
+#include "Field/FieldSystemComponent.h"
+#include "Field/FieldSystemObjects.h"
+
+#include "PhysicsEngine/RadialForceComponent.h"
+
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
+
 
 ABird::ABird()
 {
@@ -9,7 +17,6 @@ ABird::ABird()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	RootComponent = StaticMesh;
-	StaticMesh->SetSimulatePhysics(true);
 	StaticMesh->SetNotifyRigidBodyCollision(true);
 	StaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	StaticMesh->SetCollisionObjectType(ECC_PhysicsBody);
@@ -30,12 +37,13 @@ void ABird::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ABird::ShootWithVelocity(const FVector& Velocity)
+void ABird::ShootWithVelocity(const FVector& velocity)
 {
-	if (StaticMesh)
-	{
-		StaticMesh->SetPhysicsLinearVelocity(Velocity);
-	}
+	if (!StaticMesh) return;
+
+	StaticMesh->SetSimulatePhysics(true);
+	StaticMesh->SetAngularDamping(20.0F);
+	StaticMesh->SetPhysicsLinearVelocity(velocity);
 }
 
 void ABird::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,

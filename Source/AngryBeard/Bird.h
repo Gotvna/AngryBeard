@@ -3,16 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/StaticMeshComponent.h"
-#include "Field/FieldSystemComponent.h"
-#include "Field/FieldSystemObjects.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/GameplayStatics.h"
-#include "PhysicsEngine/RadialForceComponent.h"
-#include "GameFramework/Actor.h"
-#include "Particles/ParticleSystem.h"
-#include "Particles/ParticleSystemComponent.h"
 #include "Bird.generated.h"
+
+class UStaticMeshComponent;
+class UFieldSystemComponent;
+class UParticleSystemComponent;
 
 
 UCLASS()
