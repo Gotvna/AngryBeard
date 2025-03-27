@@ -27,16 +27,6 @@ void ASpecialTarget::IncrementScore()
 	}
 }
 
-void ASpecialTarget::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (OtherActor && OtherActor->ActorHasTag("Bullet"))
-	{
-		IncrementScore();
-		Destroy();
-	}
-}
-
 void ASpecialTarget::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

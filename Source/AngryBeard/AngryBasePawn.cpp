@@ -123,9 +123,8 @@ void AAngryBasePawn::Aim(const FInputActionInstance& Instance)
 			GetWorld(),
 			point.Location,
 			8.0f,
-			FColor::Yellow,
-			false,
-			0.05f
+			FColor::Green,
+			false
 		);
 	}
 }
