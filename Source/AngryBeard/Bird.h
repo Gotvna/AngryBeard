@@ -4,48 +4,45 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraSystem.h" // Add Niagara include
+#include "NiagaraFunctionLibrary.h" // Add Niagara include
 #include "Bird.generated.h"
 
 class UStaticMeshComponent;
 class UFieldSystemComponent;
-class UParticleSystemComponent;
-
 
 UCLASS()
 class ANGRYBEARD_API ABird : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	ABird();
-
-	void ShootWithVelocity(const FVector& velocity);
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+    GENERATED_BODY()
 
 public:
+    ABird();
 
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StaticMesh;
+    void ShootWithVelocity(const FVector& velocity);
 
-	UPROPERTY(EditAnywhere)
-	UFieldSystemComponent* FieldSystem;
+protected:
+    virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects")
-	UParticleSystemComponent* ImpactParticleComponent;
+public:
+    virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Effects")
-	float ImpactThreshold = 500.0f;
+    UPROPERTY(EditAnywhere)
+    UStaticMeshComponent* StaticMesh;
 
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+    UPROPERTY(EditAnywhere)
+    UFieldSystemComponent* FieldSystem;
+
+    UPROPERTY(EditAnywhere, Category = "Effects")
+    class UNiagaraSystem* ImpactNiagaraSystem; // Changed to Niagara system
+
+    UPROPERTY(EditAnywhere, Category = "Effects")
+    float ImpactThreshold = 500.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Effects", meta = (ClampMin = "0.1", ClampMax = "10.0"))
+    float ParticleScale = 0.5f;
+
+    UFUNCTION()
+    void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+        UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };

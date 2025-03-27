@@ -8,7 +8,7 @@ public class AngryBeard : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "FieldSystemEngine" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "FieldSystemEngine", "Niagara" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
