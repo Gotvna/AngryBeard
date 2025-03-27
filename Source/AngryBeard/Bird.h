@@ -10,7 +10,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "GameFramework/Actor.h"
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Bird.generated.h"
+
 
 UCLASS()
 class ANGRYBEARD_API ABird : public AActor
@@ -36,6 +39,15 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(EditAnywhere)
+	UFieldSystemComponent* FieldSystem;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effects")
+	UParticleSystemComponent* ImpactParticleComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	float ImpactThreshold = 500.0f;
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
