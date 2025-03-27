@@ -18,6 +18,5 @@ protected:
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 
 public:
-	class UBoxComponent* CollisionComponent;
 
 };
