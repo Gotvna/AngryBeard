@@ -106,7 +106,7 @@ void AAngryBasePawn::Aim(const FInputActionInstance& Instance)
 	FPredictProjectilePathParams pathParams;
 	pathParams.StartLocation = socketPos;
 	pathParams.LaunchVelocity = launchVelocity;
-	pathParams.bTraceWithCollision = true;
+	pathParams.bTraceWithCollision = false;
 	pathParams.ProjectileRadius = 5.0f;
 	pathParams.MaxSimTime = 2.0f;
 	pathParams.SimFrequency = 15.0f;
